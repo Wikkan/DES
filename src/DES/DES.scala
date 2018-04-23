@@ -203,12 +203,14 @@ class DES(var password: String, var text: String,
       // Do the last permutation and append the result to result.
       result = result ++ permute(d ++ g, FP)
     }
-    bitsToString(result)
-    // TODO Check Padding
+    // Return the final string of data ciphered/deciphered.
+    // Remove the padding if decrypt.
+    if (encrypt) bitsToString(result)
+    else removePadding(bitsToString(result))
   }
 
   /*
-   * Recreate the string from the bit array
+   * Recreate the string from the bit array.
    */
   private def bitsToString(bits: Array[Int]): String = {
     val bytes = nSplit(bits)
@@ -219,6 +221,13 @@ class DES(var password: String, var text: String,
       Integer.parseInt(byte, 2).toChar
     }
     chars.mkString
+  }
+
+  /*
+   * Remove the padding of the plain text (it assume there is padding).
+   */
+  private def removePadding(data: String): String = {
+    data
   }
 
   /*
@@ -310,6 +319,9 @@ class DES(var password: String, var text: String,
     fissure
   }
 
+  /*
+   * Apply a xor and return the resulting list.
+   */
   private def xor(a1: Array[Int], a2: Array[Int]): Array[Int] = {
     a1.zip(a2).map { case (x, y) => x ^ y }
   }
