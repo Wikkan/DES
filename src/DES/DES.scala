@@ -1,11 +1,16 @@
 package DES
 
 import scala.collection.immutable.HashMap
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * Created by E. Adrián Garro Sánchez on 22/04/18.
+  * All supplementary data gotten from Wikipedia:
+  * http://en.wikipedia.org/wiki/DES_supplementary_material
   */
-class DES(var key: String, var text: String) {
+class DES(var password: String, var text: String,
+          var key: Array[Int] = Array(),
+          var keys: ArrayBuffer[Array[Int]] = ArrayBuffer()) {
 
   // Initial permutation for the input data.
   private val IP = Array(
@@ -144,10 +149,10 @@ class DES(var key: String, var text: String) {
     String.format("%" + digits + "s", c.toInt.toBinaryString).replace(' ', '0')
 
   /*
-   * Convert a string into a list of bits.
+   * Convert a string into a array of bits.
    */
-  def stringToBits(text: String): List[Int] = {
-    var bits: List[Int] = List()
+  def stringToBits(text: String): Array[Int] = {
+    var bits: Array[Int] = Array()
     for (c <- text) {
       val byte: String = toBinary(c)
       val fixedBits = for (digit <- byte) yield {digit.asDigit}
@@ -157,16 +162,16 @@ class DES(var key: String, var text: String) {
   }
 
   /*
-   * Split a list into sub lists of size "n".
+   * Split an array into sub arrays of size "n".
    */
-  private def nSplit(l: List[Any], n: Int = 8): List[List[Any]] = {
-    l.grouped(n).toList
+  private def nSplit(l: Array[Int], n: Int = 8): Array[Array[Int]] = {
+    l.grouped(n).toArray
   }
 
   /*
    * Recreate the string from the bit array
    */
-  def bitsToString(bits: List[Int]): String = {
+  def bitsToString(bits: Array[Int]): String = {
     val bytes = nSplit(bits)
     val bytesFixed = for (l <- bytes) yield {
         l.mkString
@@ -189,13 +194,65 @@ class DES(var key: String, var text: String) {
     }
   }
 
+  /*
+   * Permutes block using a given permutation.
+   */
+  def permute(block: Array[Int], permutation: Array[Int]): Array[Int] = {
+    for (i <- permutation) yield {
+      block(i-1)
+    }
+  }
+
+  /*
+   * Shift a array of the given value.
+   */
+  def shift(g: Array[Int], d: Array[Int], n: Int): Array[Array[Int]] = {
+    val fissure = Array(
+      g.drop(n) ++ g.take(n),
+      d.drop(n) ++ d.take(n)
+    )
+    fissure
+  }
+
+  /*
+   * Algorithm that generates all the keys.
+   */
+  def genKeys(): ArrayBuffer[Array[Int]] = {
+    key = stringToBits(password)
+    // Applies the initial permutation on the key, set 56 bits.
+    key = permute(key, PC1)
+    // Splits it in to (g->LEFT),(d->RIGHT)
+    val parts = nSplit(key, 28)
+    // Left Half, 28 bits.
+    var g = parts(0)
+    // Right Half, 28 bits.
+    var d = parts(1)
+    // Apply the 16 rounds.
+    for (i <- 0 to 15) {
+      // Apply the shift associated with the round (not always 1).
+      val fissure: Array[Array[Int]] = shift(g, d, SHIFT(i))
+      g = fissure(0)
+      d = fissure(1)
+      // Merge them.
+      var mix = g ++ d
+      // Applies the second permutation on the mix, set 48 bits.
+      mix = permute(mix, PC2)
+      // Saves de the K_i key.
+      keys += mix
+    }
+    keys
+  }
+
   def run(): String = {
-    if (key.length < 8) { throw new Exception("Key Should be 8 bytes long.") }
+    if (password.length < 8) { throw new Exception("Key Should be 8 bytes long.") }
     // If key size is above 8 bytes, cut to be 8 bytes long.
-    else if (key.length > 8) { key = key.slice(0, 8); }
+    else if (password.length > 8) { password = password.slice(0, 8); }
     // Data size must be multiple of 8 bytes.
-    if ( text.length % 8 != 0) { addPadding() }
+    if (text.length % 8 != 0) { addPadding() }
     // Generate all the keys.
+    genKeys()
+    // Split the text in blocks of 8 bytes i.e. 64 bits.
+    // TODO
 
     text
   }
