@@ -1,14 +1,20 @@
 package DES
 
+import scala.collection.immutable
 import scala.collection.immutable.HashMap
 import scala.collection.mutable.ArrayBuffer
 
 /**
+  *
   * Created by E. Adrián Garro Sánchez on 22/04/18.
+  * Instituto Tecnológico de Costa Rica.
+  *
   * All supplementary data gotten from Wikipedia:
   * http://en.wikipedia.org/wiki/DES_supplementary_material
+  *
   */
 class DES(var password: String, var text: String,
+          var encrypt: Boolean = true,
           var key: Array[Int] = Array(),
           var keys: ArrayBuffer[Array[Int]] = ArrayBuffer()) {
 
@@ -59,10 +65,10 @@ class DES(var password: String, var text: String,
   // Initial permutations made on the key.
 
   private val PC1 = Array(
-    57, 49, 41, 33, 25, 17, 9,  // Left Halve.
+    57, 49, 41, 33, 25, 17, 9, // Left Half.
     1, 58, 50, 42, 34, 26, 18,
     10, 2, 59, 51, 43, 35, 27,
-    19, 11, 3, 60, 52, 44, 36,  // Right Halve.
+    19, 11, 3, 60, 52, 44, 36, // Right Half.
     63, 55, 47, 39, 31, 23, 15,
     7, 62, 54, 46, 38, 30, 22,
     14, 6, 61, 53, 45, 37, 29,
@@ -142,23 +148,90 @@ class DES(var password: String, var text: String,
   // Determine the shift for each round of keys.
   private val SHIFT = Array(1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1)
 
-  /*
-   * Return the binary value as a string of the given size
-   */
-  private def toBinary(c: Char, digits: Int = 8): String =
-    String.format("%" + digits + "s", c.toInt.toBinaryString).replace(' ', '0')
+  def run(): String = {
+    if (password.length < 8) {
+      throw new Exception("Key Should be 8 bytes long.")
+    }
+    // If key size is above 8 bytes, cut to be 8 bytes long.
+    else if (password.length > 8) {
+      password = password.slice(0, 8)
+    }
+    // Data size must be multiple of 8 bytes.
+    if (text.length % 8 != 0) {
+      addPadding()
+    }
+    // Generate all the keys.
+    genKeys()
+    // Split the text in blocks of 8 bytes i.e. 64 bits.
+    val textBlocks = text.grouped(8)
+    var result: Array[Int] = Array()
+    // Loop over all the blocks of data.
+    for (block <- textBlocks) {
+      // Convert the block in bits array.
+      var eightBytes: Array[Int] = stringToBits(block)
+      // Apply the initial permutation.
+      eightBytes = permute(eightBytes, IP)
+      // g(LEFT), d(RIGHT)
+      val parts: Array[Array[Int]] = nSplit(eightBytes, 32)
+      var g: Array[Int] = parts(0)
+      var d: Array[Int] = parts(1)
+      var temp: Array[Int] = Array()
+      // Do the 16 rounds, Feistel's network.
+      for (i <- 0 to 15) {
+        /** Cipher Function **/
+        // Expand d to match K_i size (48 bits).
+        val dExpanded = permute(d, E)
+        // If encrypt use K_i.
+        if (encrypt) {
+          temp = xor(keys(i), dExpanded)
+        }
+        // If decrypt start by the last key.
+        else {
+          temp = xor(keys(15 - i), dExpanded)
+        }
+        // Method that will apply the SBOXes.
+        temp = substitute(temp)
+        temp = permute(temp, P)
+
+        /** Cipher Function **/
+        // Round XOR
+        temp = xor(g, temp)
+        // Round Swap
+        g = d
+        d = temp
+      }
+      // Do the last permutation and append the result to result.
+      result = result ++ permute(d ++ g, FP)
+    }
+    bitsToString(result)
+    // TODO Check Padding
+  }
 
   /*
-   * Convert a string into a array of bits.
+   * Recreate the string from the bit array
    */
-  def stringToBits(text: String): Array[Int] = {
-    var bits: Array[Int] = Array()
-    for (c <- text) {
-      val byte: String = toBinary(c)
-      val fixedBits = for (digit <- byte) yield {digit.asDigit}
-      bits = bits ++ fixedBits
+  private def bitsToString(bits: Array[Int]): String = {
+    val bytes = nSplit(bits)
+    val bytesFixed = for (l <- bytes) yield {
+        l.mkString
     }
-    bits
+    val chars: Array[Char] = for (byte <- bytesFixed) yield {
+      Integer.parseInt(byte, 2).toChar
+    }
+    chars.mkString
+  }
+
+  /*
+   * Add padding to the data using PKCS#5 spec.
+   * PKCS: Public-Key Cryptography Standards
+   */
+  private def addPadding(): Unit = {
+    val pad_len: Int = 8 - (text.length % 8)
+    var count = pad_len
+    while (count > 0) {
+      text += pad_len.toChar
+      count -= 1
+    }
   }
 
   /*
@@ -169,55 +242,18 @@ class DES(var password: String, var text: String,
   }
 
   /*
-   * Recreate the string from the bit array
-   */
-  def bitsToString(bits: Array[Int]): String = {
-    val bytes = nSplit(bits)
-    val bytesFixed = for (l <- bytes) yield {
-        l.mkString
-    }
-    val chars = for (byte <- bytesFixed) yield {
-      Integer.parseInt(byte, 2).toChar
-    }
-    chars.mkString
-  }
-
-  /*
-   * Add padding to the data using PKCS#5 spec.
-   */
-  def addPadding(): Unit = {
-    val pad_len: Int = 8 - (text.length % 8)
-    var count = pad_len
-    while (count > 0) {
-      text += pad_len.toChar
-      count -= 1
-    }
-  }
-
-  /*
    * Permutes block using a given permutation.
    */
-  def permute(block: Array[Int], permutation: Array[Int]): Array[Int] = {
+  private def permute(block: Array[Int], permutation: Array[Int]): Array[Int] = {
     for (i <- permutation) yield {
       block(i-1)
     }
   }
 
   /*
-   * Shift a array of the given value.
-   */
-  def shift(g: Array[Int], d: Array[Int], n: Int): Array[Array[Int]] = {
-    val fissure = Array(
-      g.drop(n) ++ g.take(n),
-      d.drop(n) ++ d.take(n)
-    )
-    fissure
-  }
-
-  /*
    * Algorithm that generates all the keys.
    */
-  def genKeys(): ArrayBuffer[Array[Int]] = {
+  private def genKeys(): Unit = {
     key = stringToBits(password)
     // Applies the initial permutation on the key, set 56 bits.
     key = permute(key, PC1)
@@ -240,21 +276,81 @@ class DES(var password: String, var text: String,
       // Saves de the K_i key.
       keys += mix
     }
-    keys
   }
 
-  def run(): String = {
-    if (password.length < 8) { throw new Exception("Key Should be 8 bytes long.") }
-    // If key size is above 8 bytes, cut to be 8 bytes long.
-    else if (password.length > 8) { password = password.slice(0, 8); }
-    // Data size must be multiple of 8 bytes.
-    if (text.length % 8 != 0) { addPadding() }
-    // Generate all the keys.
-    genKeys()
-    // Split the text in blocks of 8 bytes i.e. 64 bits.
-    // TODO
-
-    text
+  /*
+   * Convert a string into a array of bits.
+   */
+  private def stringToBits(text: String): Array[Int] = {
+    var bits: Array[Int] = Array()
+    for (char <- text) {
+      val byte: String = toBinary(char)
+      val fixedBits = for (digit <- byte) yield {
+        digit.asDigit
+      }
+      bits = bits ++ fixedBits
+    }
+    bits
   }
 
+  /*
+   * Return the binary value as a string of the given size.
+   */
+  private def toBinary(c: Char, digits: Int = 8): String =
+    String.format("%" + digits + "s", c.toInt.toBinaryString).replace(' ', '0')
+
+  /*
+   * Shift a array of the given value.
+   */
+  private def shift(g: Array[Int], d: Array[Int], n: Int): Array[Array[Int]] = {
+    val fissure = Array(
+      g.drop(n) ++ g.take(n),
+      d.drop(n) ++ d.take(n)
+    )
+    fissure
+  }
+
+  private def xor(a1: Array[Int], a2: Array[Int]): Array[Int] = {
+    a1.zip(a2).map { case (x, y) => x ^ y }
+  }
+
+  private def substitute(dExpanded: Array[Int]): Array[Int] = {
+    // Split bits array into sublist of 6 bits.
+    val subBlocks: Array[Array[Int]] = nSplit(dExpanded, 6)
+    var result: Array[Int] = Array()
+    // For all the sub arrays...
+    // Must be 8 loops, because 8 * 6 = 48 and there are 8 SBoxes.
+    for (i <- subBlocks.indices) {
+      val block: Array[Int] = subBlocks(i)
+      // Row is the first and last bit.
+      val row: Int = Integer.parseInt(
+        block(0).toString + block(5).toString,
+        2
+      )
+      // Column is the 2th, 3th, 4th, 5th bits.
+      val column = Integer.parseInt(
+        block(1).toString
+          + block(2).toString
+          + block(3).toString
+          + block(4).toString,
+        2
+      )
+      // Take the value in the SBOX appropriated for the round_i.
+      val sboxValue = SBoxes(i)(row)(column)
+      // Convert the value to binary.
+      val bin: String = intToBinary(sboxValue, 4)
+      val binArr: immutable.IndexedSeq[Int] = for (char <- bin) yield {
+        char.asDigit
+      }
+      // And append it to the resulting list.
+      result = result ++ binArr
+    }
+    result
+  }
+
+  /*
+   * Return the binary value as a string of the given size.
+   */
+  private def intToBinary(i: Int, digits: Int = 8): String =
+    String.format("%" + digits + "s", i.toBinaryString).replace(' ', '0')
 }
