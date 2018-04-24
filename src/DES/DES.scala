@@ -15,7 +15,6 @@ import scala.collection.mutable.ArrayBuffer
   */
 class DES(var password: String, var text: String,
           var encrypt: Boolean = true,
-          var key: Array[Int] = Array(),
           var keys: ArrayBuffer[Array[Int]] = ArrayBuffer()) {
 
   // Initial permutation for the input data.
@@ -227,7 +226,8 @@ class DES(var password: String, var text: String,
    * Remove the padding of the plain text (it assume there is padding).
    */
   private def removePadding(data: String): String = {
-    data
+    val padLen: Int = data.charAt(data.length() - 1).toInt
+    data.slice(0, padLen)
   }
 
   /*
@@ -235,10 +235,10 @@ class DES(var password: String, var text: String,
    * PKCS: Public-Key Cryptography Standards
    */
   private def addPadding(): Unit = {
-    val pad_len: Int = 8 - (text.length % 8)
-    var count = pad_len
+    val padLen: Int = 8 - (text.length % 8)
+    var count = padLen
     while (count > 0) {
-      text += pad_len.toChar
+      text += padLen.toChar
       count -= 1
     }
   }
@@ -263,7 +263,7 @@ class DES(var password: String, var text: String,
    * Algorithm that generates all the keys.
    */
   private def genKeys(): Unit = {
-    key = stringToBits(password)
+    var key: Array[Int] = stringToBits(password)
     // Applies the initial permutation on the key, set 56 bits.
     key = permute(key, PC1)
     // Splits it in to (g->LEFT),(d->RIGHT)
