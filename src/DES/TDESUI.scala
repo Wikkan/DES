@@ -100,6 +100,6 @@ class TDESUI extends Application {
     val scene = new Scene(grid, 525, 300)
     primaryStage.setScene(scene)
     primaryStage.show()
-    
+
   }
 }
