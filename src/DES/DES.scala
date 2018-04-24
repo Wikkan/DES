@@ -15,6 +15,7 @@ import scala.collection.mutable.ArrayBuffer
   */
 class DES(var password: String, var text: String,
           var encrypt: Boolean = true,
+          var removePadding: Boolean = false,
           var keys: ArrayBuffer[Array[Int]] = ArrayBuffer()) {
 
   // Initial permutation for the input data.
@@ -203,9 +204,8 @@ class DES(var password: String, var text: String,
       result = result ++ permute(d ++ g, FP)
     }
     // Return the final string of data ciphered/deciphered.
-    // Remove the padding if decrypt.
-    if (encrypt) bitsToString(result)
-    else removePadding(bitsToString(result))
+    if (removePadding) removePadding(bitsToString(result))
+    else bitsToString(result)
   }
 
   /*

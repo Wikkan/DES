@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7eddbebb-4117-40db-8d46-41223943bb17" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/DES/UI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DES/DES/DES$.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DES/DES/DES$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DES/DES/DES.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DES/DES/DES.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/DES/DES/Main$.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/DES/DES/Main$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DES/DES.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/DES.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DES/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/Main.scala" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DES.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DES.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DES/DES.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="318">
-              <caret line="271" column="20" lean-forward="true" selection-start-line="271" selection-start-column="20" selection-end-line="271" selection-end-column="20" />
+            <state relative-caret-position="166">
+              <caret line="206" column="29" lean-forward="true" selection-start-line="206" selection-start-column="29" selection-end-line="206" selection-end-column="29" />
               <folding>
                 <element signature="e#13#46#0" expanded="true" />
               </folding>
@@ -30,8 +34,8 @@
       <file leaf-file-name="UI.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DES/UI.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+            <state relative-caret-position="453">
+              <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
               <folding>
                 <element signature="e#28#65#0" expanded="true" />
               </folding>
@@ -39,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Main.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DES/Main.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="215">
+              <caret line="22" column="24" lean-forward="true" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -56,6 +60,7 @@
       <find>bitsToString</find>
       <find>:</find>
       <find>stringToBits</find>
+      <find>removePadding</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -69,9 +74,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/src/DES/UI.scala" />
         <option value="$PROJECT_DIR$/src/DES/DES.scala" />
         <option value="$PROJECT_DIR$/src/DES/Main.scala" />
-        <option value="$PROJECT_DIR$/src/DES/UI.scala" />
       </list>
     </option>
   </component>
@@ -130,7 +135,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.UI">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="DES.Main" />
       <module name="DES" />
@@ -200,8 +205,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.UI" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.UI" />
       </list>
     </recent_temporary>
   </component>
@@ -339,30 +344,30 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DES.scala" />
-    <entry file="file://$PROJECT_DIR$/src/DES/Main.scala">
+    <entry file="file://$PROJECT_DIR$/src/DES/DES.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="166">
+          <caret line="206" column="29" lean-forward="true" selection-start-line="206" selection-start-column="29" selection-end-line="206" selection-end-column="29" />
+          <folding>
+            <element signature="e#13#46#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DES/UI.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+        <state relative-caret-position="453">
+          <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
           <folding>
             <element signature="e#28#65#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DES/DES.scala">
+    <entry file="file://$PROJECT_DIR$/src/DES/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="271" column="20" lean-forward="true" selection-start-line="271" selection-start-column="20" selection-end-line="271" selection-end-column="20" />
-          <folding>
-            <element signature="e#13#46#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="215">
+          <caret line="22" column="24" lean-forward="true" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
         </state>
       </provider>
     </entry>
