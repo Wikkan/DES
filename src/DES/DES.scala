@@ -227,7 +227,7 @@ class DES(var password: String, var text: String,
    */
   private def removePadding(data: String): String = {
     val padLen: Int = data.charAt(data.length() - 1).toInt
-    data.slice(0, padLen)
+    data.slice(0, data.length() - padLen)
   }
 
   /*
