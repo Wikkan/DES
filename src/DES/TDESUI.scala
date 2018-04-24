@@ -79,7 +79,6 @@ class TDESUI extends Application {
           showAlert("Resultado", cipherText)
         }
         else if (modesComboBox.getValue == "Desencriptar") {
-          println(textField.getText.trim)
           val dK3 = new DES(key3TextField.getText.trim, textField.getText.trim, false)
           val eK2 = new DES(key2TextField.getText.trim, dK3.run())
           val dK1 = new DES(key1TextField.getText.trim, eK2.run(), false, true)
