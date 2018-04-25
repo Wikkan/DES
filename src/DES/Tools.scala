@@ -10,6 +10,14 @@ package DES
 object Tools {
 
   /*
+   * Remove the padding of the plain text (it assume there is padding).
+   */
+  def removePadding(data: String): String = {
+    val padLen: Int = data.charAt(data.length() - 1).toInt
+    data.slice(0, data.length() - padLen)
+  }
+
+  /*
    * Split an array into sub arrays of size "n".
    */
   def nSplit(l: Array[Int], n: Int = 8): Array[Array[Int]] = {

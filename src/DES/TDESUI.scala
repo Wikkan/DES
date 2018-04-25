@@ -154,14 +154,14 @@ class TDESUI extends Application {
           if (textField.getText.trim.isEmpty) showAlert("Advertencia", "¡Debe indicar el texto en claro!")
           else {
             val eK1: DES = new DES(key1TextField.getText.trim, textField.getText.trim)
-            val dK2: DES = new DES(key2TextField.getText.trim, eK1.run(), false)
-            val eK3: DES = new DES(key3TextField.getText.trim, dK2.run())
-            val cipherText = eK3.run()
+            val dK2: DES = new DES(key2TextField.getText.trim, Tools.bitsToString(eK1.run()), false)
+            val eK3: DES = new DES(key3TextField.getText.trim, Tools.bitsToString(dK2.run()))
+            val cipherText = Tools.bitsToString(eK3.run())
             // TODO Show Text and Hex Text
             tDESResult.setText("Resultado: " + cipherText)
           }
         }
-        else if (modesComboBox.getValue == "Desencriptar") {
+        /*else if (modesComboBox.getValue == "Desencriptar") {
           // TODO replace textField.getText.trim
           val dK3: DES = new DES(key3TextField.getText.trim, textField.getText.trim, false)
           val eK2: DES = new DES(key2TextField.getText.trim, dK3.run())
@@ -169,7 +169,7 @@ class TDESUI extends Application {
           val text = dK1.run()
           // Show Text
           tDESResult.setText("Resultado: " + text)
-        }
+        }*/
       }
       foo(e)
     })
