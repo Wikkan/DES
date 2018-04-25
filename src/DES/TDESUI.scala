@@ -1,5 +1,7 @@
 package DES
 
+import java.io.File
+
 import javafx.application.Application
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -10,13 +12,22 @@ import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import javafx.stage.Stage
+import javafx.stage.FileChooser
 import javafx.scene.control._
 import javafx.collections.FXCollections
 import javafx.scene.layout.HBox
 import javafx.scene.control.Alert.AlertType
 import javafx.event.ActionEvent
 import javafx.scene.layout.GridPane
-import javafx.geometry.HPos.RIGHT
+import javafx.geometry.HPos.LEFT
+
+object TDESUI
+{
+  def main(args: Array[String])
+  {
+    Application.launch(classOf[TDESUI], args: _*)
+  }
+}
 
 class TDESUI extends Application {
   /*
@@ -39,16 +50,16 @@ class TDESUI extends Application {
     grid.setHgap(10)
     grid.setVgap(10)
     grid.setPadding(new Insets(25, 25, 25, 25))
+    grid.setStyle("-fx-background-color: #D3D3D3;")
 
     val sceneTitle = new Text("Bienvenid@")
-    sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20))
+    sceneTitle.setFont(Font.font("Menlo", FontWeight.LIGHT, 16))
     grid.add(sceneTitle, 0, 0, 2, 1)
 
     val mode = new Label("Modo: ")
     grid.add(mode, 0, 1)
     val modes = FXCollections.observableArrayList("Encriptar", "Desencriptar")
     val modesComboBox = new ComboBox[String](modes)
-    modesComboBox.getSelectionModel.selectFirst()
     grid.add(modesComboBox, 1, 1)
 
     val key1Label = new Label("Llave 1:")
@@ -67,29 +78,71 @@ class TDESUI extends Application {
     grid.add(key3TextField, 1, 4)
 
     val textLabel = new Label("Texto: ")
-    grid.add(textLabel, 0, 5)
     val textField = new TextField
-    grid.add(textField, 1, 5)
 
-    val btn = new Button("Ejecutar TDES")
-    val hbBtn = new HBox(10)
-    hbBtn.setAlignment(Pos.BOTTOM_RIGHT)
-    hbBtn.getChildren.add(btn)
-    grid.add(hbBtn, 1, 6)
+    val cipherTextLabel = new Label("Texto cifrado: ")
+    val buttonLoadCipherText = new Button("Cargar criptograma")
+
+    val runBtn = new Button("Ejecutar")
+    val runHBBtn = new HBox(10)
+    runHBBtn.setAlignment(Pos.BOTTOM_CENTER)
+    runHBBtn.getChildren.add(runBtn)
+    grid.add(runHBBtn, 1, 7)
 
     val tDESResult = new Text()
-    grid.add(tDESResult, 0, 7)
+    grid.add(tDESResult, 0, 8)
     GridPane.setColumnSpan(tDESResult, 2)
-    GridPane.setHalignment(tDESResult, RIGHT)
+    GridPane.setHalignment(tDESResult, LEFT)
     tDESResult.setId("tDESResult")
 
-    btn.setOnAction((e: ActionEvent) => {
+    buttonLoadCipherText.setOnAction((e: ActionEvent) => {
+      def foo(e: ActionEvent): Unit = {
+        val fileChooser: FileChooser = new FileChooser()
+        val extFilter: FileChooser.ExtensionFilter = new FileChooser.ExtensionFilter(
+          "Properties files (*.properties)", "*.properties"
+        )
+        fileChooser.getExtensionFilters().add(extFilter)
+        val file: File = fileChooser.showOpenDialog(primaryStage)
+      }
+      foo(e)
+    })
+
+    modesComboBox.setOnAction((e: ActionEvent) => {
       def foo(e: ActionEvent): Unit = {
         tDESResult.setText("")
-        val anyFieldIncomplete: Boolean = (key1TextField.getText.trim.isEmpty
+        key1TextField.setText("")
+        key2TextField.setText("")
+        key3TextField.setText("")
+        if (modesComboBox.getValue == "Encriptar") {
+          if (grid.getChildren.contains(cipherTextLabel)) {
+            grid.getChildren.remove(cipherTextLabel)
+          }
+          if (grid.getChildren.contains(buttonLoadCipherText)) {
+            grid.getChildren.remove(buttonLoadCipherText)
+          }
+          grid.add(textLabel, 0, 5)
+          grid.add(textField, 1, 5)
+        } else if (modesComboBox.getValue == "Desencriptar") {
+          if (grid.getChildren.contains(textLabel)) {
+            grid.getChildren.remove(textLabel)
+          }
+          if (grid.getChildren.contains(textField)) {
+            grid.getChildren.remove(textField)
+          }
+          grid.add(cipherTextLabel, 0, 5)
+          grid.add(buttonLoadCipherText, 1, 5)
+        }
+      }
+      foo(e)
+    })
+
+    runBtn.setOnAction((e: ActionEvent) => {
+      def foo(e: ActionEvent): Unit = {
+        tDESResult.setText("")
+        val anyFieldIncomplete: Boolean = (modesComboBox.getSelectionModel.isEmpty
+          || key1TextField.getText.trim.isEmpty
           || key2TextField.getText.trim.isEmpty
-          || key3TextField.getText.trim.isEmpty
-          || textField.getText.trim.isEmpty)
+          || key3TextField.getText.trim.isEmpty)
         if (anyFieldIncomplete) showAlert("Advertencia", "¡Hay campos sin completar!")
         else if (key1TextField.getText.trim == key2TextField.getText.trim
             || key1TextField.getText.trim == key3TextField.getText.trim
@@ -100,26 +153,30 @@ class TDESUI extends Application {
           || key3TextField.getText.trim.length < 8)
           showAlert("Advertencia", "¡Las llaves deben ser de 8 caracteres!")
         else if (modesComboBox.getValue == "Encriptar") {
-          val eK1: DES = new DES(key1TextField.getText.trim, textField.getText.trim)
-          val dK2: DES = new DES(key2TextField.getText.trim, eK1.run(), false)
-          val eK3: DES = new DES(key3TextField.getText.trim, dK2.run())
-          val cipherText = eK3.run()
-          // Show Text and Hex Text
-          tDESResult.setText("Resultado: " + cipherText)
+          if (textField.getText.trim.isEmpty) showAlert("Advertencia", "¡Debe indicar el texto en claro!")
+          else {
+            val eK1: DES = new DES(key1TextField.getText.trim, textField.getText.trim)
+            val dK2: DES = new DES(key2TextField.getText.trim, eK1.run(), false)
+            val eK3: DES = new DES(key3TextField.getText.trim, dK2.run())
+            val cipherText = eK3.run()
+            // TODO Show Text and Hex Text
+            tDESResult.setText("Resultado: " + cipherText)
+          }
         }
         else if (modesComboBox.getValue == "Desencriptar") {
+          // TODO replace textField.getText.trim
           val dK3: DES = new DES(key3TextField.getText.trim, textField.getText.trim, false)
           val eK2: DES = new DES(key2TextField.getText.trim, dK3.run())
           val dK1: DES = new DES(key1TextField.getText.trim, eK2.run(), false, true)
           val text = dK1.run()
-          // Show Text and Hex Text
+          // Show Text
           tDESResult.setText("Resultado: " + text)
         }
       }
       foo(e)
     })
 
-    val scene = new Scene(grid, 525, 300)
+    val scene = new Scene(grid, 400, 300)
     primaryStage.setScene(scene)
     primaryStage.show()
 

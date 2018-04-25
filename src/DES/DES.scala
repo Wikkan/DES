@@ -211,7 +211,7 @@ class DES(var password: String, var text: String,
   /*
    * Recreate the string from the bit array.
    */
-  def bitsToString(bits: Array[Int]): String = {
+  private def bitsToString(bits: Array[Int]): String = {
     val bytes = nSplit(bits)
     val bytesFixed = for (l <- bytes) yield {
         l.mkString
@@ -348,9 +348,9 @@ class DES(var password: String, var text: String,
         2
       )
       // Take the value in the SBOX appropriated for the round_i.
-      val sboxValue = SBoxes(i)(row)(column)
+      val sBoxValue = SBoxes(i)(row)(column)
       // Convert the value to binary.
-      val bin: String = intToBinary(sboxValue, 4)
+      val bin: String = intToBinary(sBoxValue, 4)
       val binArr: immutable.IndexedSeq[Int] = for (char <- bin) yield {
         char.asDigit
       }
