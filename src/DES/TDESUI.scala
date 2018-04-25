@@ -110,9 +110,6 @@ class TDESUI extends Application {
     modesComboBox.setOnAction((e: ActionEvent) => {
       def foo(e: ActionEvent): Unit = {
         tDESResult.setText("")
-        key1TextField.setText("")
-        key2TextField.setText("")
-        key3TextField.setText("")
         if (modesComboBox.getValue == "Encriptar") {
           if (grid.getChildren.contains(cipherTextLabel)) {
             grid.getChildren.remove(cipherTextLabel)
@@ -148,6 +145,7 @@ class TDESUI extends Application {
             || key1TextField.getText.trim == key3TextField.getText.trim
             || key2TextField.getText.trim == key3TextField.getText.trim)
           showAlert("Advertencia", "¡Las llaves deben ser diferentes!")
+        // TODO Check Hex Len
         else if (key1TextField.getText.trim.length < 8
           || key2TextField.getText.trim.length < 8
           || key3TextField.getText.trim.length < 8)
