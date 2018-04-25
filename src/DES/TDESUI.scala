@@ -6,7 +6,6 @@ import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
-import javafx.scene.layout.GridPane
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
@@ -16,6 +15,8 @@ import javafx.collections.FXCollections
 import javafx.scene.layout.HBox
 import javafx.scene.control.Alert.AlertType
 import javafx.event.ActionEvent
+import javafx.scene.layout.GridPane
+import javafx.geometry.HPos.RIGHT
 
 class TDESUI extends Application {
   /*
@@ -75,23 +76,44 @@ class TDESUI extends Application {
     hbBtn.setAlignment(Pos.BOTTOM_RIGHT)
     hbBtn.getChildren.add(btn)
     grid.add(hbBtn, 1, 6)
+
+    val tDESResult = new Text()
+    grid.add(tDESResult, 0, 7)
+    GridPane.setColumnSpan(tDESResult, 2)
+    GridPane.setHalignment(tDESResult, RIGHT)
+    tDESResult.setId("tDESResult")
+
     btn.setOnAction((e: ActionEvent) => {
       def foo(e: ActionEvent): Unit = {
-        val anyFieldIncomplete = key1TextField.getText.trim.isEmpty || key2TextField.getText.trim.isEmpty || key3TextField.getText.trim.isEmpty || textField.getText.trim.isEmpty
+        tDESResult.setText("")
+        val anyFieldIncomplete: Boolean = (key1TextField.getText.trim.isEmpty
+          || key2TextField.getText.trim.isEmpty
+          || key3TextField.getText.trim.isEmpty
+          || textField.getText.trim.isEmpty)
         if (anyFieldIncomplete) showAlert("Advertencia", "¡Hay campos sin completar!")
+        else if (key1TextField.getText.trim == key2TextField.getText.trim
+            || key1TextField.getText.trim == key3TextField.getText.trim
+            || key2TextField.getText.trim == key3TextField.getText.trim)
+          showAlert("Advertencia", "¡Las llaves deben ser diferentes!")
+        else if (key1TextField.getText.trim.length < 8
+          || key2TextField.getText.trim.length < 8
+          || key3TextField.getText.trim.length < 8)
+          showAlert("Advertencia", "¡Las llaves deben ser de 8 caracteres!")
         else if (modesComboBox.getValue == "Encriptar") {
-          val eK1 = new DES(key1TextField.getText.trim, textField.getText.trim)
-          val dK2 = new DES(key2TextField.getText.trim, eK1.run(), false)
-          val eK3 = new DES(key3TextField.getText.trim, dK2.run())
+          val eK1: DES = new DES(key1TextField.getText.trim, textField.getText.trim)
+          val dK2: DES = new DES(key2TextField.getText.trim, eK1.run(), false)
+          val eK3: DES = new DES(key3TextField.getText.trim, dK2.run())
           val cipherText = eK3.run()
-          showAlert("Resultado", cipherText)
+          // Show Text and Hex Text
+          tDESResult.setText("Resultado: " + cipherText)
         }
         else if (modesComboBox.getValue == "Desencriptar") {
-          val dK3 = new DES(key3TextField.getText.trim, textField.getText.trim, false)
-          val eK2 = new DES(key2TextField.getText.trim, dK3.run())
-          val dK1 = new DES(key1TextField.getText.trim, eK2.run(), false, true)
+          val dK3: DES = new DES(key3TextField.getText.trim, textField.getText.trim, false)
+          val eK2: DES = new DES(key2TextField.getText.trim, dK3.run())
+          val dK1: DES = new DES(key1TextField.getText.trim, eK2.run(), false, true)
           val text = dK1.run()
-          showAlert("Resultado", text)
+          // Show Text and Hex Text
+          tDESResult.setText("Resultado: " + text)
         }
       }
       foo(e)
@@ -102,4 +124,5 @@ class TDESUI extends Application {
     primaryStage.show()
 
   }
+
 }

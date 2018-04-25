@@ -211,7 +211,7 @@ class DES(var password: String, var text: String,
   /*
    * Recreate the string from the bit array.
    */
-  private def bitsToString(bits: Array[Int]): String = {
+  def bitsToString(bits: Array[Int]): String = {
     val bytes = nSplit(bits)
     val bytesFixed = for (l <- bytes) yield {
         l.mkString
