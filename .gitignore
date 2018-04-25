@@ -22,6 +22,7 @@ project/plugins/project/
 *.ipr
 *.iws
 .idea
+*.idea
 out
 
 # Vim
@@ -36,3 +37,7 @@ build
 .settings
 org.scala-ide.sdt.core/META-INF/MANIFEST.MF
 org.scala-ide.sdt.update-site/site.xml`
+*.xml
+
+*.xml
+*.xml`
