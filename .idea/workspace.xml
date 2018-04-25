@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7eddbebb-4117-40db-8d46-41223943bb17" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/DES/DES.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/DES.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DES/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DES/TDESUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/TDESUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DES/Tools.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/Tools.scala" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -41,8 +38,8 @@
       <file leaf-file-name="TDESUI.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DES/TDESUI.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="41" column="21" lean-forward="true" selection-start-line="41" selection-start-column="21" selection-end-line="41" selection-end-column="21" />
+            <state relative-caret-position="180">
+              <caret line="24" column="49" lean-forward="true" selection-start-line="24" selection-start-column="49" selection-end-line="24" selection-end-column="49" />
               <folding>
                 <element signature="e#13#32#0" expanded="true" />
               </folding>
@@ -290,7 +287,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Learn" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -451,8 +448,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DES/TDESUI.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="41" column="21" lean-forward="true" selection-start-line="41" selection-start-column="21" selection-end-line="41" selection-end-column="21" />
+        <state relative-caret-position="180">
+          <caret line="24" column="49" lean-forward="true" selection-start-line="24" selection-start-column="49" selection-end-line="24" selection-end-column="49" />
           <folding>
             <element signature="e#13#32#0" expanded="true" />
           </folding>

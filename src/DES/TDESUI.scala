@@ -1,7 +1,6 @@
 package DES
 
 import java.io.File
-
 import javafx.application.Application
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -21,10 +20,8 @@ import javafx.event.ActionEvent
 import javafx.scene.layout.GridPane
 import javafx.geometry.HPos.LEFT
 
-object TDESUI
-{
-  def main(args: Array[String])
-  {
+object TDESUI {
+  def main(args: Array[String]) {
     Application.launch(classOf[TDESUI], args: _*)
   }
 }
