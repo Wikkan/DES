@@ -15,7 +15,6 @@ import scala.collection.mutable.ArrayBuffer
   */
 class DES(var password: String, var text: String,
           var encrypt: Boolean = true,
-          var removePadding: Boolean = false,
           var keys: ArrayBuffer[Array[Int]] = ArrayBuffer()) {
 
   // Initial permutation for the input data.
@@ -148,7 +147,10 @@ class DES(var password: String, var text: String,
   // Determine the shift for each round of keys.
   private val SHIFT = Array(1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1)
 
-  def run(): String = {
+  /*
+   * Run DES Algorithm.
+   */
+  def run(): Array[Int] = {
     if (password.length < 8) {
       throw new Exception("Key Should be 8 bytes long.")
     }
@@ -168,11 +170,11 @@ class DES(var password: String, var text: String,
     // Loop over all the blocks of data.
     for (block <- textBlocks) {
       // Convert the block in bits array.
-      var eightBytes: Array[Int] = stringToBits(block)
+      var eightBytes: Array[Int] = Tools.stringToBits(block)
       // Apply the initial permutation.
       eightBytes = permute(eightBytes, IP)
       // g(LEFT), d(RIGHT)
-      val parts: Array[Array[Int]] = nSplit(eightBytes, 32)
+      val parts: Array[Array[Int]] = Tools.nSplit(eightBytes, 32)
       var g: Array[Int] = parts(0)
       var d: Array[Int] = parts(1)
       var temp: Array[Int] = Array()
@@ -204,35 +206,11 @@ class DES(var password: String, var text: String,
       result = result ++ permute(d ++ g, FP)
     }
     // Return the final string of data ciphered/deciphered.
-    if (removePadding) removePadding(bitsToString(result))
-    else bitsToString(result)
+    result
   }
 
   /*
-   * Recreate the string from the bit array.
-   */
-  private def bitsToString(bits: Array[Int]): String = {
-    val bytes = nSplit(bits)
-    val bytesFixed = for (l <- bytes) yield {
-        l.mkString
-    }
-    val chars: Array[Char] = for (byte <- bytesFixed) yield {
-      Integer.parseInt(byte, 2).toChar
-    }
-    chars.mkString
-  }
-
-  /*
-   * Remove the padding of the plain text (it assume there is padding).
-   */
-  private def removePadding(data: String): String = {
-    val padLen: Int = data.charAt(data.length() - 1).toInt
-    data.slice(0, data.length() - padLen)
-  }
-
-  /*
-   * Add padding to the data using PKCS#5 spec.
-   * PKCS: Public-Key Cryptography Standards
+   * Add padding to the data using PKCS (Public-Key Cryptography Standards) #5 spec.
    */
   private def addPadding(): Unit = {
     val padLen: Int = 8 - (text.length % 8)
@@ -241,13 +219,6 @@ class DES(var password: String, var text: String,
       text += padLen.toChar
       count -= 1
     }
-  }
-
-  /*
-   * Split an array into sub arrays of size "n".
-   */
-  private def nSplit(l: Array[Int], n: Int = 8): Array[Array[Int]] = {
-    l.grouped(n).toArray
   }
 
   /*
@@ -260,14 +231,14 @@ class DES(var password: String, var text: String,
   }
 
   /*
-   * Algorithm that generates all the keys.
+   * Algorithm that generates all DES keys.
    */
   private def genKeys(): Unit = {
-    var key: Array[Int] = stringToBits(password)
+    var key: Array[Int] = Tools.stringToBits(password)
     // Applies the initial permutation on the key, set 56 bits.
     key = permute(key, PC1)
     // Splits it in to (g->LEFT),(d->RIGHT)
-    val parts = nSplit(key, 28)
+    val parts = Tools.nSplit(key, 28)
     // Left Half, 28 bits.
     var g = parts(0)
     // Right Half, 28 bits.
@@ -288,27 +259,6 @@ class DES(var password: String, var text: String,
   }
 
   /*
-   * Convert a string into a array of bits.
-   */
-  private def stringToBits(text: String): Array[Int] = {
-    var bits: Array[Int] = Array()
-    for (char <- text) {
-      val byte: String = toBinary(char)
-      val fixedBits = for (digit <- byte) yield {
-        digit.asDigit
-      }
-      bits = bits ++ fixedBits
-    }
-    bits
-  }
-
-  /*
-   * Return the binary value as a string of the given size.
-   */
-  private def toBinary(c: Char, digits: Int = 8): String =
-    String.format("%" + digits + "s", c.toInt.toBinaryString).replace(' ', '0')
-
-  /*
    * Shift a array of the given value.
    */
   private def shift(g: Array[Int], d: Array[Int], n: Int): Array[Array[Int]] = {
@@ -320,7 +270,7 @@ class DES(var password: String, var text: String,
   }
 
   /*
-   * Apply a xor and return the resulting list.
+   * Apply a XOR and return the resulting list.
    */
   private def xor(a1: Array[Int], a2: Array[Int]): Array[Int] = {
     a1.zip(a2).map { case (x, y) => x ^ y }
@@ -328,7 +278,7 @@ class DES(var password: String, var text: String,
 
   private def substitute(dExpanded: Array[Int]): Array[Int] = {
     // Split bits array into sublist of 6 bits.
-    val subBlocks: Array[Array[Int]] = nSplit(dExpanded, 6)
+    val subBlocks: Array[Array[Int]] = Tools.nSplit(dExpanded, 6)
     var result: Array[Int] = Array()
     // For all the sub arrays...
     // Must be 8 loops, because 8 * 6 = 48 and there are 8 SBoxes.
@@ -348,9 +298,9 @@ class DES(var password: String, var text: String,
         2
       )
       // Take the value in the SBOX appropriated for the round_i.
-      val sboxValue = SBoxes(i)(row)(column)
+      val sBoxValue = SBoxes(i)(row)(column)
       // Convert the value to binary.
-      val bin: String = intToBinary(sboxValue, 4)
+      val bin: String = Tools.intToBinary(sBoxValue, 4)
       val binArr: immutable.IndexedSeq[Int] = for (char <- bin) yield {
         char.asDigit
       }
@@ -360,9 +310,4 @@ class DES(var password: String, var text: String,
     result
   }
 
-  /*
-   * Return the binary value as a string of the given size.
-   */
-  private def intToBinary(i: Int, digits: Int = 8): String =
-    String.format("%" + digits + "s", i.toBinaryString).replace(' ', '0')
 }
