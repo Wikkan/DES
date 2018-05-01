@@ -1,5 +1,7 @@
 package DES
 
+import org.apache.commons.io.FilenameUtils
+
 object Main extends App {
 
   override def main(args: Array[String]): Unit = {
@@ -9,32 +11,38 @@ object Main extends App {
     val k3: String = "yAV8ni67"
 
     /*// Simple Encryption
-    val cipherTextHex = Tools.stringToHex(TDES.encrypt(k1, k2, k3, "supersecret!"))
-    Tools.saveFileContentInProperties("/Users/adrian/Desktop/", "c", cipherTextHex)
-    println(cipherTextHex)*/
+    val message = "supersecret!"
+    val cipherTextHex = Tools.stringToHex(TDES.encrypt(k1, k2, k3, message))
+    val destinationPath = "/Users/adrian/Desktop/"
+    val propertiesName = "cryp"
+    Tools.saveFileContentInProperties(destinationPath, propertiesName, cipherTextHex)*/
 
     /*// Simple Decryption
-    val cipherTextProperties = Tools.loadProperties("/Users/adrian/Desktop/c1525143804478.properties")
+    val originPath = "/Users/adrian/Desktop/c1525143804478.properties"
+    val cryptogram = Tools.loadProperties(originPath)
     val plainText = Tools.removePadding(
-      TDES.decrypt(k1, k2, k3, Tools.hexToString(cipherTextProperties.getProperty("content")))
-    )
-    println(plainText)*/
+      TDES.decrypt(k1, k2, k3, Tools.hexToString(cryptogram.getProperty("content")))
+    )*/
 
     /* File Encryption
-    val imgBase64 = Tools.encoder("/Users/adrian/Pictures/Motos/CRF.jpg")
+    val originPath = "/Users/adrian/Pictures/Motos/CRF.jpg"
+    val destinationPath = "/Users/adrian/Desktop/"
+    val propertiesName = "cryp"
+    val fileBase64 = Tools.encoder(originPath)
+    val cryptogram = TDES.encrypt(k1, k2, k3, fileBase64)
     Tools.saveFileContentInProperties(
-      "/Users/adrian/Desktop/",
-      "c",
-      TDES.encrypt(k1, k2, k3, imgBase64),
-      ".jpg"
+      destinationPath,
+      propertiesName,
+      cryptogram,
+      FilenameUtils.getExtension(originPath)
     )*/
 
     /* File Decryption */
-    val cipherTextProperties = Tools.loadProperties("/Users/adrian/Desktop/c1525213334047.properties")
-    Tools.decoder(
-      TDES.decrypt(k1, k2, k3, cipherTextProperties.getProperty("content")),
-      "/Users/adrian/Desktop/" + "f" + cipherTextProperties.getProperty("extension")
-    )
+    val originPath = "/Users/adrian/Desktop/cryp1525215575627.properties"
+    val cryptogram = Tools.loadProperties(originPath)
+    val plainText = Tools.removePadding(TDES.decrypt(k1, k2, k3, cryptogram.getProperty("content")))
+    val  destinationPath = "/Users/adrian/Desktop/" + "file." + cryptogram.getProperty("extension")
+    Tools.decoder(plainText, destinationPath)
 
   }
 
