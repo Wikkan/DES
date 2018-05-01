@@ -63,11 +63,18 @@ object Tools {
    * macOS Path example: /Users/adrian/Desktop/p.properties"
    */
   def loadProperties(path: String): Properties = {
-    val properties = new Properties()
-    val input = new FileInputStream(path)
-    properties.load(input)
-    input.close()
-    properties
+    try {
+      val properties = new Properties()
+      val input = new FileInputStream(path)
+      properties.load(input)
+      input.close()
+      properties
+    } catch {
+      case e: FileNotFoundException =>
+        throw e.getCause
+      case ioe: IOException =>
+        throw ioe.getCause
+    }
   }
 
   /*
