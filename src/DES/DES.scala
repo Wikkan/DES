@@ -62,7 +62,6 @@ class DES(var password: String, var text: String,
   )
 
   // Initial permutations made on the key.
-
   private val PC1 = Array(
     57, 49, 41, 33, 25, 17, 9, // Left Half.
     1, 58, 50, 42, 34, 26, 18,
@@ -150,7 +149,7 @@ class DES(var password: String, var text: String,
   /*
    * Run DES Algorithm.
    */
-  def run(): Array[Int] = {
+  def run(): String = {
     if (password.length < 8) {
       throw new Exception("Key Should be 8 bytes long.")
     }
@@ -194,7 +193,6 @@ class DES(var password: String, var text: String,
         // Method that will apply the SBOXes.
         temp = substitute(temp)
         temp = permute(temp, P)
-
         /** Cipher Function **/
         // Round XOR
         temp = xor(g, temp)
@@ -206,7 +204,7 @@ class DES(var password: String, var text: String,
       result = result ++ permute(d ++ g, FP)
     }
     // Return the final string of data ciphered/deciphered.
-    result
+    Tools.bitsToString(result)
   }
 
   /*

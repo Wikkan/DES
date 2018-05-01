@@ -7,7 +7,54 @@ package DES
   *
   */
 
+import java.sql.Timestamp
+import java.io.FileOutputStream
+import java.io.FileInputStream
+import java.util.Properties
+
 object Tools {
+
+  val timestamp = new Timestamp(System.currentTimeMillis)
+
+  /*
+   * Get text property from properties file.
+   * Path example: /Users/adrian/Desktop/cx.properties"
+   */
+  def loadText(path: String, property: String): String = {
+    val properties = new Properties()
+    val input = new FileInputStream(path)
+    // Load a properties file.
+    properties.load(input)
+    input.close()
+    properties.getProperty(property)
+  }
+
+  /*
+   * Create properties in order to save plainText/cipherText.
+   */
+  def saveText(path: String, property: String, text: String): Unit = {
+    val properties = new Properties()
+    val output = new FileOutputStream(path + property + timestamp.getTime + ".properties")
+    // Set the properties value.
+    properties.setProperty(property, text)
+    // Save properties.
+    properties.store(output, "")
+    output.close()
+  }
+
+  /*
+   * Convert normal string to hex bytes string.
+   */
+  def stringToHex(text: String): String = {
+    text.toArray.map(_.toInt.toHexString).mkString
+  }
+
+  /*
+   * Convert hex bytes string to normal string.
+   */
+  def hexToString(hexString: String): String = {
+    hexString.sliding(2, 2).toArray.map(Integer.parseInt(_, 16).toChar).mkString
+  }
 
   /*
    * Remove the padding of the plain text (it assume there is padding).
@@ -25,7 +72,7 @@ object Tools {
   }
 
   /*
-   * Recreate the string from the bit array.
+   * Recreate string from bits array.
    */
   def bitsToString(bits: Array[Int]): String = {
     val bytes = nSplit(bits)
