@@ -7,51 +7,53 @@ package DES
   *
   */
 
+import java.sql.Timestamp
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.sql.Timestamp
-import java.util.Properties
 import java.util.Base64
+import java.util.Properties
 
 object Tools {
 
   val timestamp = new Timestamp(System.currentTimeMillis)
 
+  /*
+   * Create a file from base64 string.
+   */
   def decoder(base64File: String, pathFile: String): Unit = {
     try {
       val contentOutFile = new FileOutputStream(pathFile)
       // Converting a Base64 String into file byte array.
-      try {
-        val fileByteArray = Base64.getDecoder.decode(base64File)
-        contentOutFile.write(fileByteArray)
-      } catch {
-        case e: FileNotFoundException =>
-          println("File not found" + e)
-        case ioe: IOException =>
-          println("Exception while reading the File " + ioe)
-      } finally if (contentOutFile != null) contentOutFile.close()
+      val fileData = Base64.getDecoder.decode(base64File)
+      contentOutFile.write(fileData)
+    } catch {
+      case e: FileNotFoundException =>
+        throw e.getCause
+      case ioe: IOException =>
+        throw ioe.getCause
     }
   }
 
+  /*
+   * Encode file in base64 string.
+   */
   def encoder(filePath: String): String = {
     var base64File = ""
     val file = new File(filePath)
     try {
       val contentInFile = new FileInputStream(file)
       // Reading a file from file system.
-      try {
-        val fileData = new Array[Byte](file.length.asInstanceOf[Int])
-        contentInFile.read(fileData)
-        base64File = Base64.getEncoder.encodeToString(fileData)
-      } catch {
-        case e: FileNotFoundException =>
-          println("File not found" + e)
-        case ioe: IOException =>
-          println("Exception while reading the File " + ioe)
-      } finally if (contentInFile != null) contentInFile.close()
+      val fileData = new Array[Byte](file.length.asInstanceOf[Int])
+      contentInFile.read(fileData)
+      base64File = Base64.getEncoder.encodeToString(fileData)
+    } catch {
+      case e: FileNotFoundException =>
+        throw e.getCause
+      case ioe: IOException =>
+        throw ioe.getCause
     }
     base64File
   }

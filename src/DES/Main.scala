@@ -20,17 +20,21 @@ object Main extends App {
     )
     println(plainText)*/
 
-    /* File Encryption */
+    /* File Encryption
     val imgBase64 = Tools.encoder("/Users/adrian/Pictures/Motos/CRF.jpg")
     Tools.saveFileContentInProperties(
       "/Users/adrian/Desktop/",
       "c",
-      Tools.stringToHex(TDES.encrypt(k1, k2, k3, imgBase64)),
+      TDES.encrypt(k1, k2, k3, imgBase64),
       ".jpg"
-    )
+    )*/
 
     /* File Decryption */
-    //Tools.decoder(str, "/Users/adrian/Desktop/CRF1.jpg")
+    val cipherTextProperties = Tools.loadProperties("/Users/adrian/Desktop/c1525213334047.properties")
+    Tools.decoder(
+      TDES.decrypt(k1, k2, k3, cipherTextProperties.getProperty("content")),
+      "/Users/adrian/Desktop/" + "f" + cipherTextProperties.getProperty("extension")
+    )
 
   }
 
