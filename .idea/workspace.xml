@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7eddbebb-4117-40db-8d46-41223943bb17" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/DES/Tools.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/Tools.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/DES/UI.scala" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,13 +28,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Tools.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Tools.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DES/Tools.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="91" column="18" lean-forward="true" selection-start-line="91" selection-start-column="18" selection-end-line="91" selection-end-column="18" />
+            <state relative-caret-position="-711">
+              <caret line="16" column="27" lean-forward="true" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
               <folding>
                 <element signature="e#124#149#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UI.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/DES/UI.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="156">
+              <caret line="24" column="45" lean-forward="true" selection-start-line="24" selection-start-column="45" selection-end-line="24" selection-end-column="45" />
+              <folding>
+                <element signature="e#13#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -74,7 +86,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/DES/UI.scala" />
         <option value="$PROJECT_DIR$/src/DES/UI.java" />
         <option value="$PROJECT_DIR$/src/DES/Binary.scala" />
         <option value="$PROJECT_DIR$/src/DES/DES.scala" />
@@ -85,6 +96,7 @@
         <option value="$PROJECT_DIR$/src/DES/LZString.java" />
         <option value="$PROJECT_DIR$/src/DES/Main.scala" />
         <option value="$PROJECT_DIR$/src/DES/Tools.scala" />
+        <option value="$PROJECT_DIR$/src/DES/UI.scala" />
       </list>
     </option>
   </component>
@@ -284,12 +296,12 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50069445" side_tool="true" weight="0.32892805" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49930555" visible="true" weight="0.32892805" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49930555" visible="true" weight="0.32892805" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Learn" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -465,16 +477,8 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DES.scala" />
-    <entry file="file://$PROJECT_DIR$/src/DES/UI.scala" />
     <entry file="file://$PROJECT_DIR$/src/DES/UI.java" />
     <entry file="file://$PROJECT_DIR$/c1525140426431.properties" />
-    <entry file="file://$PROJECT_DIR$/src/DES/TDESUI.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3381">
-          <caret line="179" column="3" selection-start-line="179" selection-start-column="3" selection-end-line="179" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/c1525140887171.properties" />
     <entry file="file://$PROJECT_DIR$/src/DES/FileX.scala" />
     <entry file="file://$PROJECT_DIR$/src/DES/DES.scala">
@@ -522,12 +526,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/DES/TDESUI.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3759">
+          <caret line="179" column="3" selection-end-line="180" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DES/Tools.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="91" column="18" lean-forward="true" selection-start-line="91" selection-start-column="18" selection-end-line="91" selection-end-column="18" />
+        <state relative-caret-position="-711">
+          <caret line="16" column="27" lean-forward="true" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
           <folding>
             <element signature="e#124#149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DES/UI.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="24" column="45" lean-forward="true" selection-start-line="24" selection-start-column="45" selection-end-line="24" selection-end-column="45" />
+          <folding>
+            <element signature="e#13#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
