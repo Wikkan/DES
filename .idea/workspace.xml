@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7eddbebb-4117-40db-8d46-41223943bb17" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DES/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DES/UI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/DES/UI.scala" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -22,8 +24,8 @@
       <file leaf-file-name="Main.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DES/Main.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+            <state relative-caret-position="170">
+              <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -31,20 +33,11 @@
       <file leaf-file-name="UI.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DES/UI.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="98" column="95" lean-forward="true" selection-start-line="98" selection-start-column="95" selection-end-line="98" selection-end-column="95" />
+            <state relative-caret-position="230">
+              <caret line="301" column="15" lean-forward="true" selection-start-line="301" selection-start-column="15" selection-end-line="301" selection-end-column="15" />
               <folding>
                 <element signature="e#13#32#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TDESUI.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DES/TDESUI.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="80" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -70,6 +63,7 @@
       <find>toBinary</find>
       <find>Data</find>
       <find>keyStr</find>
+      <find>tDESResult</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -87,13 +81,13 @@
         <option value="$PROJECT_DIR$/src/DES/Binary.scala" />
         <option value="$PROJECT_DIR$/src/DES/DES.scala" />
         <option value="$PROJECT_DIR$/src/DES/TDES.scala" />
-        <option value="$PROJECT_DIR$/src/DES/TDESUI.scala" />
         <option value="$PROJECT_DIR$/src/DES/FileX.scala" />
         <option value="$PROJECT_DIR$/src/DES/scriptFile.scala" />
         <option value="$PROJECT_DIR$/src/DES/LZString.java" />
-        <option value="$PROJECT_DIR$/src/DES/Main.scala" />
+        <option value="$PROJECT_DIR$/src/DES/TDESUI.scala" />
         <option value="$PROJECT_DIR$/src/DES/Tools.scala" />
         <option value="$PROJECT_DIR$/src/DES/UI.scala" />
+        <option value="$PROJECT_DIR$/src/DES/Main.scala" />
       </list>
     </option>
   </component>
@@ -282,7 +276,14 @@
       <option name="project" value="LOCAL" />
       <updated>1524511720631</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Avances en UI">
+      <created>1525328375277</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1525328375277</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -340,7 +341,8 @@
     <MESSAGE value="Generación de llaves." />
     <MESSAGE value="DES Funcional" />
     <MESSAGE value="Small changes in order to remove padding." />
-    <option name="LAST_COMMIT_MESSAGE" value="Small changes in order to remove padding." />
+    <MESSAGE value="Avances en UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Avances en UI" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -529,34 +531,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/DES/TDESUI.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3216">
+          <caret line="134" column="30" lean-forward="true" selection-start-line="134" selection-start-column="30" selection-end-line="134" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.12.5.jar!/scala/Double.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DES/Tools.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1184">
-          <caret line="66" column="39" lean-forward="true" selection-start-line="66" selection-start-column="39" selection-end-line="66" selection-end-column="39" />
+        <state relative-caret-position="1397">
+          <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
           <folding>
-            <element signature="e#124#149#0" expanded="true" />
+            <element signature="e#124#140#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DES/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DES/TDESUI.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="80" selection-end-column="63" />
+        <state relative-caret-position="170">
+          <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DES/UI.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="98" column="95" lean-forward="true" selection-start-line="98" selection-start-column="95" selection-end-line="98" selection-end-column="95" />
+        <state relative-caret-position="230">
+          <caret line="301" column="15" lean-forward="true" selection-start-line="301" selection-start-column="15" selection-end-line="301" selection-end-column="15" />
           <folding>
             <element signature="e#13#32#0" expanded="true" />
           </folding>

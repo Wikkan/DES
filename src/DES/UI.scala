@@ -1,6 +1,7 @@
 package DES
 
 import java.io.File
+import java.lang.Double
 
 import javafx.application.Application
 import javafx.collections.FXCollections
@@ -23,18 +24,6 @@ class UI extends Application {
 
   var fileToEncryptPath = ""
   var fileToDecryptPath = ""
-
-  /*
-   * Show Alert Without Header Text.
-   */
-  private def showAlert(title: String, message: String): Unit = {
-    val alert = new Alert(AlertType.INFORMATION)
-    alert.setTitle(title)
-    // Header Text: null
-    alert.setHeaderText(null)
-    alert.setContentText(message)
-    alert.showAndWait
-  }
 
   override def start(primaryStage: Stage): Unit = {
 
@@ -150,9 +139,7 @@ class UI extends Application {
 
     encBtn.setOnAction((e: ActionEvent) => {
       def action(e: ActionEvent): Unit = {
-
         var validFields: Boolean = true
-
         // Any Field Incomplete?
         if (encKeysTypeComboBox.getSelectionModel.isEmpty) {
           showAlert("Advertencia", "Debe indicar el tipo de las llaves.")
@@ -186,8 +173,7 @@ class UI extends Application {
             validFields = false
           }
         }
-
-        // Check that keys are different.
+        // Determinate if keys are different.
         if (!encKey1TextField.getText.trim.isEmpty
           && !encKey2TextField.getText.trim.isEmpty
           && !encKey3TextField.getText.trim.isEmpty) {
@@ -200,7 +186,6 @@ class UI extends Application {
             validFields = false
           }
         }
-
         // Check if hex keys are really hex and have correct length.
         if (encKeysTypeComboBox.getValue == "Hexadecimal") {
           if (!Tools.isHexNumber(encKey1TextField.getText.trim)) {
@@ -228,7 +213,6 @@ class UI extends Application {
             validFields = false
           }
         }
-
         // Check if text keys have correct length.
         if (encKeysTypeComboBox.getValue == "Texto") {
           if (encKey1TextField.getText.trim.length < 8) {
@@ -244,7 +228,6 @@ class UI extends Application {
             validFields = false
           }
         }
-
         // Check if hex text input is really hex.
         if (encInputTypeComboBox.getValue == "Hexadecimal") {
           if (!textField.getText.trim.isEmpty) {
@@ -254,14 +237,62 @@ class UI extends Application {
             }
           }
         }
-
         /** If all fields are OK. **/
         if (validFields) {
-
+          // Case 1: Keys = text, Input = text.
+          if (encKeysTypeComboBox.getValue == "Texto") {
+            if (encInputTypeComboBox.getValue == "Texto") {
+              val c = TDES.encrypt(
+                encKey1TextField.getText.trim,
+                encKey2TextField.getText.trim,
+                encKey3TextField.getText.trim,
+                textField.getText.trim
+              )
+              showAlert("Criptograma", Tools.stringToHex(c))
+            }
+          }
+          // Case 2: Keys = hex, Input = text.
+          if (encKeysTypeComboBox.getValue == "Hexadecimal") {
+            if (encInputTypeComboBox.getValue == "Texto") {
+              val c = TDES.encrypt(
+                Tools.hexToString(encKey1TextField.getText.trim),
+                Tools.hexToString(encKey2TextField.getText.trim),
+                Tools.hexToString(encKey3TextField.getText.trim),
+                textField.getText.trim
+              )
+              showAlert("Criptograma", Tools.stringToHex(c))
+            }
+          }
+          // Case 3: Keys = text, Input = hex.
+          if (encKeysTypeComboBox.getValue == "Texto") {
+            if (encInputTypeComboBox.getValue == "Hexadecimal") {
+              val c = TDES.encrypt(
+                encKey1TextField.getText.trim,
+                encKey2TextField.getText.trim,
+                encKey3TextField.getText.trim,
+                Tools.hexToString(textField.getText.trim)
+              )
+              showAlert("Criptograma", Tools.stringToHex(c))
+            }
+          }
+          // Case 4: Keys = hex, Input = hex.
+          if (encKeysTypeComboBox.getValue == "Hexadecimal") {
+            if (encInputTypeComboBox.getValue == "Hexadecimal") {
+              val c = TDES.encrypt(
+                Tools.hexToString(encKey1TextField.getText.trim),
+                Tools.hexToString(encKey2TextField.getText.trim),
+                Tools.hexToString(encKey3TextField.getText.trim),
+                Tools.hexToString(textField.getText.trim)
+              )
+              showAlert("Criptograma", Tools.stringToHex(c))
+            }
+          }
+          // Case 5: Keys = hex, Input = file.
+          // Case 6: Keys = text, Input = file.
         }
 
+        /** If all fields are OK. **/
       }
-
       action(e)
     })
 
@@ -295,6 +326,22 @@ class UI extends Application {
     primaryStage.setScene(scene)
     primaryStage.show()
 
+  }
+
+  /*
+   * Show Alert Without Header Text.
+   */
+  private def showAlert(title: String, message: String): Unit = {
+    val textArea = new TextArea(message)
+    textArea.setEditable(false)
+    textArea.setWrapText(true)
+    val gridPane = new GridPane
+    gridPane.setMaxWidth(Double.MAX_VALUE)
+    gridPane.add(textArea, 0, 0)
+    val alert = new Alert(AlertType.INFORMATION)
+    alert.setTitle(title)
+    alert.getDialogPane.setContent(gridPane)
+    alert.showAndWait
   }
 
 }

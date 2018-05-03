@@ -1,14 +1,12 @@
 package DES
 
-import org.apache.commons.io.FilenameUtils
-
 object Main extends App {
 
   override def main(args: Array[String]): Unit = {
 
-    val k1: String = "-21zwPzG"
-    val k2: String = "xF41kL0U"
-    val k3: String = "yAV8ni67"
+    val k1: String = "-21zwPzG" // 2d32317a77507a47
+    val k2: String = "xF41kL0U" // 784634316b4c3055
+    val k3: String = "yAV8ni67" // 794156386e693637
 
     /*// Simple Encryption
     val message = "supersecret!"
