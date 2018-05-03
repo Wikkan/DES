@@ -123,7 +123,6 @@ class UI extends Application {
           }
         }
       }
-
       action(e)
     })
 
@@ -321,7 +320,6 @@ class UI extends Application {
           }
           // End. Case 5: Keys = text/hex, Input = file.
         }
-
         /** End. If all fields are OK. **/
       }
       action(e)
@@ -343,29 +341,36 @@ class UI extends Application {
 
     val decKeysType = new Label("Tipo de llaves: ")
     decryptionGrid.add(decKeysType, 0, 0)
-    val deKeysTypeColl = FXCollections.observableArrayList("Texto", "Hexadecimal")
-    val deKeysTypeComboBox = new ComboBox[String](deKeysTypeColl)
-    decryptionGrid.add(deKeysTypeComboBox, 1, 0)
+    val decKeysTypeColl = FXCollections.observableArrayList("Texto", "Hexadecimal")
+    val decKeysTypeComboBox = new ComboBox[String](decKeysTypeColl)
+    decryptionGrid.add(decKeysTypeComboBox, 1, 0)
 
     val decKey1Label = new Label("Llave 1:")
     decryptionGrid.add(decKey1Label, 0, 1)
-    val deKey1TextField = new TextField
-    decryptionGrid.add(deKey1TextField, 1, 1)
+    val decKey1TextField = new TextField
+    decryptionGrid.add(decKey1TextField, 1, 1)
 
     val decKey2Label = new Label("Llave 2:")
     decryptionGrid.add(decKey2Label, 0, 2)
-    val deKey2TextField = new TextField
-    decryptionGrid.add(deKey2TextField, 1, 2)
+    val decKey2TextField = new TextField
+    decryptionGrid.add(decKey2TextField, 1, 2)
 
     val decKey3Label = new Label("Llave 3:")
     decryptionGrid.add(decKey3Label, 0, 3)
-    val deKey3TextField = new TextField
-    decryptionGrid.add(deKey3TextField, 1, 3)
+    val decKey3TextField = new TextField
+    decryptionGrid.add(decKey3TextField, 1, 3)
+
+    val decInputType = new Label("Tipo de entrada: ")
+    decryptionGrid.add(decInputType, 0, 4)
+    val decInputTypeColl = FXCollections.observableArrayList("Hexadecimal", "Archivo")
+    val decInputTypeComboBox = new ComboBox[String](decInputTypeColl)
+    decryptionGrid.add(decInputTypeComboBox, 1, 4)
+
+    val cipherHexLabel = new Label("Hexadecimal: ")
+    val cipherHexField = new TextField
 
     val loadCryptogramLabel = new Label("Criptograma: ")
-    decryptionGrid.add(loadCryptogramLabel, 0, 4)
     val buttonLoadCryptogram = new Button("Cargar")
-    decryptionGrid.add(buttonLoadCryptogram, 1, 4)
     buttonLoadCryptogram.setOnAction((e: ActionEvent) => {
       def action(e: ActionEvent): Unit = {
         val fileChooser: FileChooser = new FileChooser()
@@ -376,6 +381,40 @@ class UI extends Application {
         val file: File = fileChooser.showOpenDialog(primaryStage)
         cryptogramToDecryptPath = file.getAbsolutePath
       }
+      action(e)
+    })
+
+    decInputTypeComboBox.setOnAction((e: ActionEvent) => {
+      def action(e: ActionEvent): Unit = {
+        if (decInputTypeComboBox.getValue == "Hexadecimal") {
+          if (decryptionGrid.getChildren.contains(loadCryptogramLabel)) {
+            decryptionGrid.getChildren.remove(loadCryptogramLabel)
+          }
+          if (decryptionGrid.getChildren.contains(buttonLoadCryptogram)) {
+            decryptionGrid.getChildren.remove(buttonLoadCryptogram)
+          }
+          if (!decryptionGrid.getChildren.contains(cipherHexLabel)) {
+            decryptionGrid.add(cipherHexLabel, 0, 5)
+          }
+          if (!decryptionGrid.getChildren.contains(cipherHexField)) {
+            decryptionGrid.add(cipherHexField, 1, 5)
+          }
+        }
+        if (decInputTypeComboBox.getValue == "Archivo") {
+          if (decryptionGrid.getChildren.contains(cipherHexLabel)) {
+            decryptionGrid.getChildren.remove(cipherHexLabel)
+          }
+          if (decryptionGrid.getChildren.contains(cipherHexField)) {
+            decryptionGrid.getChildren.remove(cipherHexField)
+          }
+          if (!decryptionGrid.getChildren.contains(loadCryptogramLabel)) {
+            decryptionGrid.add(loadCryptogramLabel, 0, 5)
+          }
+          if (!decryptionGrid.getChildren.contains(buttonLoadCryptogram)) {
+            decryptionGrid.add(buttonLoadCryptogram, 1, 5)
+          }
+        }
+      }
 
       action(e)
     })
@@ -384,12 +423,142 @@ class UI extends Application {
     val decHBBtn = new HBox(5)
     decHBBtn.setAlignment(Pos.BOTTOM_LEFT)
     decHBBtn.getChildren.add(decBtn)
-    decryptionGrid.add(decHBBtn, 0, 5)
-    encBtn.setOnAction((e: ActionEvent) => {
+    decryptionGrid.add(decHBBtn, 0, 6)
+    decBtn.setOnAction((e: ActionEvent) => {
       def action(e: ActionEvent): Unit = {
-        // TODO
-      }
+        var validFields: Boolean = true
+        // Any Field Incomplete?
+        if (decKeysTypeComboBox.getSelectionModel.isEmpty) {
+          showAlert("Advertencia", "Debe indicar el tipo de las llaves.")
+          validFields = false
+        }
+        if (decKey1TextField.getText.trim.isEmpty) {
+          showAlert("Advertencia", "Debe indicar la llave 1.")
+          validFields = false
+        }
+        if (decKey2TextField.getText.trim.isEmpty) {
+          showAlert("Advertencia", "Debe indicar la llave 2.")
+          validFields = false
+        }
+        if (decKey3TextField.getText.trim.isEmpty) {
+          showAlert("Advertencia", "Debe indicar la llave 3.")
+          validFields = false
+        }
+        if (decInputTypeComboBox.getSelectionModel.isEmpty) {
+          showAlert("Advertencia", "Debe indicar el tipo de entrada.")
+          validFields = false
+        }
+        if (decInputTypeComboBox.getValue == "Hexadecimal") {
+          if (cipherHexField.getText.trim.isEmpty) {
+            showAlert("Advertencia", "Debe indicar un texto para decriptar.")
+            validFields = false
+          }
+        }
+        if (decInputTypeComboBox.getValue == "Archivo") {
+          if (cryptogramToDecryptPath == "") {
+            showAlert("Advertencia", "Debe cargar un archivo para decriptar.")
+            validFields = false
+          }
+        }
+        // Determinate if keys are different.
+        if (!decKey1TextField.getText.trim.isEmpty
+          && !decKey2TextField.getText.trim.isEmpty
+          && !decKey3TextField.getText.trim.isEmpty) {
+          val keys = Array(decKey1TextField.getText.trim,
+            decKey2TextField.getText.trim,
+            decKey3TextField.getText.trim
+          )
+          if (keys.distinct.length != keys.length) {
+            showAlert("Advertencia", "Todas las llaves deben ser diferentes.")
+            validFields = false
+          }
+        }
+        // Check if hex keys are really hex and have correct length.
+        if (decKeysTypeComboBox.getValue == "Hexadecimal") {
+          if (!Tools.isHexNumber(decKey1TextField.getText.trim)) {
+            showAlert("Advertencia", "La llave 1 no es hexadecimal.")
+            validFields = false
+          }
+          if (decKey1TextField.getText.trim.length < 16) {
+            showAlert("Advertencia", "La llave 1 debe tener al menos 16 caracteres.")
+            validFields = false
+          }
+          if (!Tools.isHexNumber(decKey2TextField.getText.trim)) {
+            showAlert("Advertencia", "La llave 2 no es hexadecimal.")
+            validFields = false
+          }
+          if (decKey2TextField.getText.trim.length < 16) {
+            showAlert("Advertencia", "La llave 2 debe tener al menos 16 caracteres.")
+            validFields = false
+          }
+          if (!Tools.isHexNumber(decKey3TextField.getText.trim)) {
+            showAlert("Advertencia", "La llave 3 no es hexadecimal.")
+            validFields = false
+          }
+          if (decKey3TextField.getText.trim.length < 16) {
+            showAlert("Advertencia", "La llave 3 debe tener al menos 16 caracteres.")
+            validFields = false
+          }
+        }
+        // Check if text keys have correct length.
+        if (decKeysTypeComboBox.getValue == "Texto") {
+          if (decKey1TextField.getText.trim.length < 8) {
+            showAlert("Advertencia", "La llave 1 debe tener al menos 8 caracteres.")
+            validFields = false
+          }
+          if (decKey2TextField.getText.trim.length < 8) {
+            showAlert("Advertencia", "La llave 2 debe tener al menos 8 caracteres.")
+            validFields = false
+          }
+          if (decKey3TextField.getText.trim.length < 8) {
+            showAlert("Advertencia", "La llave 3 debe tener al menos 8 caracteres.")
+            validFields = false
+          }
+        }
+        // Check if hex text input is really hex.
+        if (decInputTypeComboBox.getValue == "Hexadecimal") {
+          if (!cipherHexField.getText.trim.isEmpty) {
+            if (!Tools.isHexNumber(cipherHexField.getText.trim)) {
+              showAlert("Advertencia", "El texto a decriptar no es hexadecimal.")
+              validFields = false
+            }
+          }
+        }
 
+        /** If all fields are OK. **/
+        if (validFields) {
+          // Case 1: Keys = text, Input = hex.
+          if (decKeysTypeComboBox.getValue == "Texto") {
+            if (decInputTypeComboBox.getValue == "Hexadecimal") {
+              var m = Tools.removePadding(TDES.decrypt(
+                decKey1TextField.getText.trim,
+                decKey2TextField.getText.trim,
+                decKey3TextField.getText.trim,
+                Tools.hexToString(cipherHexField.getText.trim)
+              ))
+              if (m == "") {
+                m = "La hilera hexadecimal no representa un mensaje encriptado con TDES."
+              }
+              showAlert2("Texto en claro", m)
+            }
+          }
+          // Case 2: Keys = hex, Input = hex.
+          if (decKeysTypeComboBox.getValue == "Hexadecimal") {
+            if (decInputTypeComboBox.getValue == "Hexadecimal") {
+              val m = Tools.removePadding(TDES.decrypt(
+                Tools.hexToString(decKey1TextField.getText.trim),
+                Tools.hexToString(decKey2TextField.getText.trim),
+                Tools.hexToString(decKey3TextField.getText.trim),
+                Tools.hexToString(cipherHexField.getText.trim)
+              ))
+              showAlert2("Texto en claro", m)
+            }
+          }
+          // TODO
+        }
+
+        /** End. If all fields are OK. **/
+      }
       action(e)
     })
 
