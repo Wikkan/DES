@@ -24,6 +24,7 @@ object UI {
 class UI extends Application {
 
   var fileToEncryptPath = ""
+  var cryptogramToDecryptPath = ""
 
   override def start(primaryStage: Stage): Unit = {
 
@@ -333,6 +334,66 @@ class UI extends Application {
 
     val decryptionTab = new Tab
     decryptionTab.setText("Decriptar")
+
+    val decryptionGrid = new GridPane
+    decryptionGrid.setAlignment(Pos.CENTER)
+    decryptionGrid.setHgap(10)
+    decryptionGrid.setVgap(10)
+    decryptionGrid.setPadding(new Insets(25, 25, 25, 25))
+
+    val decKeysType = new Label("Tipo de llaves: ")
+    decryptionGrid.add(decKeysType, 0, 0)
+    val deKeysTypeColl = FXCollections.observableArrayList("Texto", "Hexadecimal")
+    val deKeysTypeComboBox = new ComboBox[String](deKeysTypeColl)
+    decryptionGrid.add(deKeysTypeComboBox, 1, 0)
+
+    val decKey1Label = new Label("Llave 1:")
+    decryptionGrid.add(decKey1Label, 0, 1)
+    val deKey1TextField = new TextField
+    decryptionGrid.add(deKey1TextField, 1, 1)
+
+    val decKey2Label = new Label("Llave 2:")
+    decryptionGrid.add(decKey2Label, 0, 2)
+    val deKey2TextField = new TextField
+    decryptionGrid.add(deKey2TextField, 1, 2)
+
+    val decKey3Label = new Label("Llave 3:")
+    decryptionGrid.add(decKey3Label, 0, 3)
+    val deKey3TextField = new TextField
+    decryptionGrid.add(deKey3TextField, 1, 3)
+
+    val loadCryptogramLabel = new Label("Criptograma: ")
+    decryptionGrid.add(loadCryptogramLabel, 0, 4)
+    val buttonLoadCryptogram = new Button("Cargar")
+    decryptionGrid.add(buttonLoadCryptogram, 1, 4)
+    buttonLoadCryptogram.setOnAction((e: ActionEvent) => {
+      def action(e: ActionEvent): Unit = {
+        val fileChooser: FileChooser = new FileChooser()
+        val extFilter = new FileChooser.ExtensionFilter(
+          "Properties files (*.properties)", "*.properties"
+        )
+        fileChooser.getExtensionFilters.add(extFilter)
+        val file: File = fileChooser.showOpenDialog(primaryStage)
+        cryptogramToDecryptPath = file.getAbsolutePath
+      }
+
+      action(e)
+    })
+
+    val decBtn = new Button("DECRIPTAR")
+    val decHBBtn = new HBox(5)
+    decHBBtn.setAlignment(Pos.BOTTOM_LEFT)
+    decHBBtn.getChildren.add(decBtn)
+    decryptionGrid.add(decHBBtn, 0, 5)
+    encBtn.setOnAction((e: ActionEvent) => {
+      def action(e: ActionEvent): Unit = {
+        // TODO
+      }
+
+      action(e)
+    })
+
+    decryptionTab.setContent(decryptionGrid)
     tabPane.getTabs.add(decryptionTab)
 
     /* ABOUT TAB */
