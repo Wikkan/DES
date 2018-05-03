@@ -554,9 +554,37 @@ class UI extends Application {
               showAlert2("Texto en claro", m)
             }
           }
-          // TODO
+          // Case 3: Keys = text/hex, Input = file.
+          if (decInputTypeComboBox.getValue == "Archivo") {
+            val cryptogram = Tools.loadProperties(cryptogramToDecryptPath)
+            var plainText = ""
+            if (decKeysTypeComboBox.getValue == "Hexadecimal") {
+              plainText = Tools.removePadding(TDES.decrypt(
+                Tools.hexToString(decKey1TextField.getText.trim),
+                Tools.hexToString(decKey2TextField.getText.trim),
+                Tools.hexToString(decKey3TextField.getText.trim),
+                cryptogram.getProperty("content")
+              ))
+            } else if (decKeysTypeComboBox.getValue == "Texto") {
+              plainText = Tools.removePadding(TDES.decrypt(
+                decKey1TextField.getText.trim,
+                decKey2TextField.getText.trim,
+                decKey3TextField.getText.trim,
+                cryptogram.getProperty("content")
+              ))
+            }
+            val directoryChooser = new DirectoryChooser
+            val selectedDirectory = directoryChooser.showDialog(primaryStage)
+            var saveFilePath = selectedDirectory.getAbsolutePath
+            if (saveFilePath != null) {
+              saveFilePath = saveFilePath + "/decryp" + Tools.timestamp.getTime + "." + cryptogram.getProperty("extension")
+              Tools.decoder(plainText, saveFilePath)
+              showAlert("Aviso", "Proceso terminado.")
+            } else {
+              showAlert("Advertencia", "No elegió donde guardar el archivo decriptado.")
+            }
+          }
         }
-
         /** End. If all fields are OK. **/
       }
       action(e)
