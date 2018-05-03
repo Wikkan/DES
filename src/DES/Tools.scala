@@ -7,18 +7,18 @@ package DES
   *
   */
 
+import java.io._
 import java.sql.Timestamp
-import java.io.File
-import java.io.FileOutputStream
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.util.Base64
-import java.util.Properties
+import java.util.{Base64, Properties}
 
 object Tools {
 
   val timestamp = new Timestamp(System.currentTimeMillis)
+
+  /*
+   * Check if string is a valid representation of Hex Number.
+   */
+  def isHexNumber(s: String): Boolean = s.matches("^[0-9A-Fa-f]+$")
 
   /*
    * Create a file from base64 string.
