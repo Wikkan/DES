@@ -36,7 +36,7 @@ object Main extends App {
     )*/
 
     /* File Decryption */
-    val originPath = "/Users/adrian/Desktop/cryp1525215575627.properties"
+    val originPath = "/Users/adrian/Desktop/cryp1525332811534.properties"
     val cryptogram = Tools.loadProperties(originPath)
     val plainText = Tools.removePadding(TDES.decrypt(k1, k2, k3, cryptogram.getProperty("content")))
     val  destinationPath = "/Users/adrian/Desktop/" + "file." + cryptogram.getProperty("extension")

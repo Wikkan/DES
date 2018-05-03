@@ -12,7 +12,8 @@ import javafx.scene.control.TabPane.TabClosingPolicy
 import javafx.scene.control.{Label, Tab, TabPane, TextField, _}
 import javafx.scene.layout.{BorderPane, GridPane, HBox}
 import javafx.scene.{Group, Scene}
-import javafx.stage.{FileChooser, Stage}
+import javafx.stage.{DirectoryChooser, FileChooser, Stage}
+import org.apache.commons.io.FilenameUtils
 
 object UI {
   def main(args: Array[String]) {
@@ -23,7 +24,6 @@ object UI {
 class UI extends Application {
 
   var fileToEncryptPath = ""
-  var fileToDecryptPath = ""
 
   override def start(primaryStage: Stage): Unit = {
 
@@ -85,14 +85,9 @@ class UI extends Application {
     buttonLoadFile.setOnAction((e: ActionEvent) => {
       def action(e: ActionEvent): Unit = {
         val fileChooser: FileChooser = new FileChooser()
-        val extFilter: FileChooser.ExtensionFilter = new FileChooser.ExtensionFilter(
-          "Properties files (*.properties)", "*.properties"
-        )
-        fileChooser.getExtensionFilters.add(extFilter)
         val file: File = fileChooser.showOpenDialog(primaryStage)
         fileToEncryptPath = file.getAbsolutePath
       }
-
       action(e)
     })
 
@@ -248,7 +243,7 @@ class UI extends Application {
                 encKey3TextField.getText.trim,
                 textField.getText.trim
               )
-              showAlert("Criptograma", Tools.stringToHex(c))
+              showAlert2("Criptograma", Tools.stringToHex(c))
             }
           }
           // Case 2: Keys = hex, Input = text.
@@ -260,7 +255,7 @@ class UI extends Application {
                 Tools.hexToString(encKey3TextField.getText.trim),
                 textField.getText.trim
               )
-              showAlert("Criptograma", Tools.stringToHex(c))
+              showAlert2("Criptograma", Tools.stringToHex(c))
             }
           }
           // Case 3: Keys = text, Input = hex.
@@ -272,7 +267,7 @@ class UI extends Application {
                 encKey3TextField.getText.trim,
                 Tools.hexToString(textField.getText.trim)
               )
-              showAlert("Criptograma", Tools.stringToHex(c))
+              showAlert2("Criptograma", Tools.stringToHex(c))
             }
           }
           // Case 4: Keys = hex, Input = hex.
@@ -284,14 +279,49 @@ class UI extends Application {
                 Tools.hexToString(encKey3TextField.getText.trim),
                 Tools.hexToString(textField.getText.trim)
               )
-              showAlert("Criptograma", Tools.stringToHex(c))
+              showAlert2("Criptograma", Tools.stringToHex(c))
             }
           }
-          // Case 5: Keys = hex, Input = file.
-          // Case 6: Keys = text, Input = file.
+          // Case 5: Keys = text/hex, Input = file.
+          if (encInputTypeComboBox.getValue == "Archivo") {
+            val directoryChooser = new DirectoryChooser
+            val selectedDirectory = directoryChooser.showDialog(primaryStage)
+            val savePropertiesPath = selectedDirectory.getAbsolutePath
+            if (savePropertiesPath != null) {
+              val propertiesName = "cryp"
+              val fileBase64 = Tools.encoder(fileToEncryptPath)
+              var cryptogram = ""
+              if (encKeysTypeComboBox.getValue == "Hexadecimal") {
+                cryptogram = TDES.encrypt(
+                  Tools.hexToString(encKey1TextField.getText.trim),
+                  Tools.hexToString(encKey2TextField.getText.trim),
+                  Tools.hexToString(encKey3TextField.getText.trim),
+                  fileBase64
+                )
+              }
+              else if (encKeysTypeComboBox.getValue == "Texto") {
+                cryptogram = TDES.encrypt(
+                  encKey1TextField.getText.trim,
+                  encKey2TextField.getText.trim,
+                  encKey3TextField.getText.trim,
+                  fileBase64
+                )
+              }
+              Tools.saveFileContentInProperties(
+                savePropertiesPath + "/",
+                propertiesName,
+                cryptogram,
+                FilenameUtils.getExtension(fileToEncryptPath)
+              )
+              showAlert("Aviso", "Proceso terminado.")
+            } else {
+              showAlert("Advertencia", "No elegió donde guardar el criptograma del archivo.")
+            }
+          }
+          // End. Case 5: Keys = text/hex, Input = file.
         }
 
-        /** If all fields are OK. **/
+        /** End. If all fields are OK. **/
       }
       action(e)
     })
@@ -329,9 +359,9 @@ class UI extends Application {
   }
 
   /*
-   * Show Alert Without Header Text.
+   * Show Alert Without Header Text (copyable).
    */
-  private def showAlert(title: String, message: String): Unit = {
+  private def showAlert2(title: String, message: String): Unit = {
     val textArea = new TextArea(message)
     textArea.setEditable(false)
     textArea.setWrapText(true)
@@ -341,6 +371,18 @@ class UI extends Application {
     val alert = new Alert(AlertType.INFORMATION)
     alert.setTitle(title)
     alert.getDialogPane.setContent(gridPane)
+    alert.showAndWait
+  }
+
+  /*
+   * Show Alert Without Header Text.
+   */
+  private def showAlert(title: String, message: String): Unit = {
+    val alert = new Alert(AlertType.INFORMATION)
+    alert.setTitle(title)
+    // Header Text: null
+    alert.setHeaderText(null)
+    alert.setContentText(message)
     alert.showAndWait
   }
 
