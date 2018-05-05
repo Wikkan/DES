@@ -603,7 +603,7 @@ class UI extends Application {
         + "Criptografía\n"
         + "Algoritmo Triple DES\n"
         + "Prof. Jorge Vargas Calvo\n"
-        + "Estudiantes: Adrián Garro, Josué Jiménez\n"
+        + "Estudiantes: Adrián Garro, Josué Jiménez, Alejandro Soto\n"
         + "I Semestre, 2018")
     )
     aboutHBox.setAlignment(Pos.CENTER)
