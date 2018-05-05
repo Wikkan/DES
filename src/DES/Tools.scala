@@ -10,6 +10,7 @@ package DES
 import java.io._
 import java.sql.Timestamp
 import java.util.{Base64, Properties}
+import org.apache.commons.codec.binary.Hex
 
 object Tools {
 
@@ -96,14 +97,14 @@ object Tools {
    * Convert normal string to hex bytes string.
    */
   def stringToHex(text: String): String = {
-    text.toArray.map(_.toInt.toHexString).mkString
+    Hex.encodeHexString(text.getBytes)
   }
 
   /*
    * Convert hex bytes string to normal string.
    */
   def hexToString(hexString: String): String = {
-    hexString.sliding(2, 2).toArray.map(Integer.parseInt(_, 16).toChar).mkString
+    new String(Hex.decodeHex(hexString.toCharArray), "UTF-8")
   }
 
   /*
