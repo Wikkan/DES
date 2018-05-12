@@ -1,5 +1,12 @@
 package DES
 
+/**
+  *
+  * Created by E. Adrián Garro Sánchez on 22/04/18.
+  * Instituto Tecnológico de Costa Rica.
+  *
+  */
+
 object Main extends App {
 
   override def main(args: Array[String]): Unit = {
