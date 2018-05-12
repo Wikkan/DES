@@ -234,39 +234,23 @@ class UI extends Application {
           }
 
         }
-        // Check if text keys have correct length, and are not weak.
+        // Check if text keys have correct length.
         if (encKeysTypeComboBox.getValue == "Texto") {
-
           // Key 1
           if (encKey1TextField.getText.trim.length < 8) {
             showAlert("Advertencia", "La llave 1 debe tener al menos 8 caracteres.")
             validFields = false
           }
-          if (Keys.weakHexKeys contains Tools.stringToHex(encKey1TextField.getText.trim).toLowerCase) {
-            showAlert("Advertencia", "La llave 1 es débil, sustitúyala.")
-            validFields = false
-          }
-
           // Key 2
           if (encKey2TextField.getText.trim.length < 8) {
             showAlert("Advertencia", "La llave 2 debe tener al menos 8 caracteres.")
             validFields = false
           }
-          if (Keys.weakHexKeys contains Tools.stringToHex(encKey2TextField.getText.trim).toLowerCase) {
-            showAlert("Advertencia", "La llave 2 es débil, sustitúyala.")
-            validFields = false
-          }
-
           // Key 3
           if (encKey3TextField.getText.trim.length < 8) {
             showAlert("Advertencia", "La llave 3 debe tener al menos 8 caracteres.")
             validFields = false
           }
-          if (Keys.weakHexKeys contains Tools.stringToHex(encKey3TextField.getText.trim).toLowerCase) {
-            showAlert("Advertencia", "La llave 3 es débil, sustitúyala.")
-            validFields = false
-          }
-
         }
         // Check if hex text input is really hex.
         if (encInputTypeComboBox.getValue == "Hexadecimal") {
@@ -566,37 +550,21 @@ class UI extends Application {
         }
         // Check if text keys have correct length, and are not weak.
         if (decKeysTypeComboBox.getValue == "Texto") {
-
           // Key 1
           if (decKey1TextField.getText.trim.length < 8) {
             showAlert("Advertencia", "La llave 1 debe tener al menos 8 caracteres.")
             validFields = false
           }
-          if (Keys.weakHexKeys contains Tools.stringToHex(decKey1TextField.getText.trim).toLowerCase) {
-            showAlert("Advertencia", "La llave 1 es débil, sustitúyala.")
-            validFields = false
-          }
-
           // Key 2
           if (decKey2TextField.getText.trim.length < 8) {
             showAlert("Advertencia", "La llave 2 debe tener al menos 8 caracteres.")
             validFields = false
           }
-          if (Keys.weakHexKeys contains Tools.stringToHex(decKey2TextField.getText.trim).toLowerCase) {
-            showAlert("Advertencia", "La llave 2 es débil, sustitúyala.")
-            validFields = false
-          }
-
           // Key 3
           if (decKey3TextField.getText.trim.length < 8) {
             showAlert("Advertencia", "La llave 3 debe tener al menos 8 caracteres.")
             validFields = false
           }
-          if (Keys.weakHexKeys contains Tools.stringToHex(decKey3TextField.getText.trim).toLowerCase) {
-            showAlert("Advertencia", "La llave 3 es débil, sustitúyala.")
-            validFields = false
-          }
-
         }
         // Check if hex text input is really hex.
         if (decInputTypeComboBox.getValue == "Hexadecimal") {
